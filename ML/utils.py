@@ -42,7 +42,9 @@ def meta_data(data):
     return data.meta
 
 
-def plot_heatmap(data, x_label, y_label, title):
+def plot_fl1_fl3(data, title):
+    x_label = 'FL1-A'
+    y_label = 'FL3-A'
     x = data[x_label]
     y = data[y_label]
     heatmap, xedges, yedges = np.histogram2d(x, y, bins=100)
@@ -53,13 +55,37 @@ def plot_heatmap(data, x_label, y_label, title):
     plt.ylim(0,10000)
     plt.ticklabel_format(axis="both", style="sci", scilimits=(0,0))
     plt.xlabel(x_label)
-    plt.ylabel(y_label)
-    
-    
-    plt.imshow(heatmap.T, extent=extent, origin='lower')
+    plt.ylabel(y_label)     
+    plt.imshow(heatmap.T, extent=extent, origin='lower', cmap='hot')
     plt.title(title, fontsize=8)
     plt.show()
+    
+    
+def plot_sca_fca(data, title):
+    x_label = 'SSC-A'
+    y_label = 'FSC-A'
+    x = data[x_label]
+    y = data[y_label]
+    heatmap, xedges, yedges = np.histogram2d(x, y, bins=100)
+    extent = [xedges[0], xedges[-1], yedges[0], yedges[-1]]
+    extent = [0, 10000, 0, 10000]
+    """
+    plt.clf()
+    plt.xlim(0,10000)
+    plt.ylim(0,10000)
+    plt.ticklabel_format(axis="both", style="sci", scilimits=(0,0))
+    plt.xlabel(x_label)
+    plt.ylabel(y_label)     
+    plt.imshow(heatmap.T, extent=extent, origin='lower', cmap='hot')
+    plt.title(title, fontsize=8)
+    plt.show()
+    """
+    plt.scatter(x, y, color='r', s=0.5)
+    plt.show()
 
+def clean_data(df):
+    df = df[(df['SSC-A'] >= 10.0) & (df['FSC-A'] >= 10.0)]
+    return df
 
 def plate(data1, data2):
     # Group in plate
