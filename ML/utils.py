@@ -45,11 +45,19 @@ def meta_data(data):
 def plot_heatmap(data, x_label, y_label, title):
     x = data[x_label]
     y = data[y_label]
-    heatmap, xedges, yedges = np.histogram2d(x, y, bins=250)
+    heatmap, xedges, yedges = np.histogram2d(x, y, bins=100)
     extent = [xedges[0], xedges[-1], yedges[0], yedges[-1]]
+    extent = [0, 10000, 0, 10000]
     plt.clf()
+    plt.xlim(0,10000)
+    plt.ylim(0,10000)
+    plt.ticklabel_format(axis="both", style="sci", scilimits=(0,0))
+    plt.xlabel(x_label)
+    plt.ylabel(y_label)
+    
+    
     plt.imshow(heatmap.T, extent=extent, origin='lower')
-    plt.title(title)
+    plt.title(title, fontsize=8)
     plt.show()
 
 
