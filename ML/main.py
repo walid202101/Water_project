@@ -1,34 +1,45 @@
-import utils as ut
-import numpy as np
+import read_fcs_files as read
+import transformation
+import heatmap_plotting
+import differences
 
+directory_fcs = r'fcs_files' 
+directory_transformed = r'transformed_files'
+directory_generatedmap = r'generatedmap_files'
 def main():
-    np.seterr(divide = 'ignore') 
+    
+    # Phase 1
     # the current directory (this should be replace by link to the fcs files from the cloud storage )
-    directory = r'fcs_files'
-    datasets = ut.loading_fcs_from_directory(directory)
-    # After reading the files we transforms the data and keep only the dataframe from the FCS file 
+    directory = r'fcs_files'    
+    datasets = read.loading_fcs_from_directory(directory)
+    
+    # Phase 2
+    # channels name
+    channel1 = "FL1-A"
+    channel2 = "FL3-A"
+    
+    # Phase 3
     transformed_data = []
-    for fc_data in datasets:
-        # print(fc_data.data.columns)
-        # fc_data.data = fc_data.data[['FL1-A', 'FL3-A']]
-        converted_data = ut.transformed_data(fc_data)
-        transformed_data.append(converted_data.data)
-        
-    clean_data = []
-    for data in transformed_data:
-        
-        cleaned = ut.clean_data(data)
-        print(str(len(data)) + ", " + str(len(cleaned)))
-        clean_data.append(cleaned)
-        
-    
-        
-    # Plotting heatmap based on selected columns
-    for i in clean_data: 
-        ut.plot_fl1_fl3(i, "Title")
-        ut.plot_sca_fca(i, "Title")
-    
-    
+    #Transformed
+    for data in datasets:
+        transformed_data.append(transformation.transform_file(
+            channel1, channel2, 
+            data, 'hlog', 500))
 
+    # Phase 4
+    generated_maps = []
+    for data in transformed_data:
+        generated_maps.append(heatmap_plotting.generate_map(data, "Hello", channel1, channel2))
+        
+    
+    # Phase 5
+    gates = []
+    for data in generated_maps:
+        gates.append(heatmap_plotting.gating(0,3,1,4, data))
+    
+    # Phase 6
+    differences.get_and_save_diff(gates[0], gates[1]) 
+   
+    
     
 main()
