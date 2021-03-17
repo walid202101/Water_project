@@ -7,6 +7,10 @@ directory_fcs = r'fcs_files'
 directory_transformed = r'transformed_files'
 directory_generatedmap = r'generatedmap_files'
 def main():
+    #Important Note
+    # To save
+    
+    
     
     # Phase 1
     # the current directory (this should be replace by link to the fcs files from the cloud storage )
@@ -25,20 +29,28 @@ def main():
         transformed_data.append(transformation.transform_file(
             channel1, channel2, 
             data, 'hlog', 500))
+    # To save use read_fcs_files save_dataframe
+    # To load Use read_fcs_files load_dataframe
 
     # Phase 4
     generated_maps = []
     for data in transformed_data:
         generated_maps.append(heatmap_plotting.generate_map(data, "Hello", channel1, channel2))
+    # To save use read_fcs_files save_array
+    # To load Use read_fcs_files load_array 
         
     
     # Phase 5
     gates = []
     for data in generated_maps:
         gates.append(heatmap_plotting.gating(0,3,1,4, data))
+    # To save use read_fcs_files save_array
+    # To load Use read_fcs_files load_array 
     
     # Phase 6
-    differences.get_and_save_diff(gates[0], gates[1]) 
+    diff = differences.get_diff(gates[0], gates[1])
+    # To save use read_fcs_files save_array
+    # To load Use read_fcs_files load_array 
    
     
     

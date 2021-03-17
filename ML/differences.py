@@ -119,8 +119,7 @@ Used local variables    =
     diffArray   = 2D matrix for holding the difference between the corresponding 
     filename    = name of output file
 """    
-def get_and_save_diff(sample1, sample2):
-    print("Calculating difference between: ", sample1, " and ", sample2, "...")
+def get_diff(sample1, sample2):
     dframe1 = sample1
     dframe2 = sample2
     numrows = dframe1.shape[0]
@@ -132,7 +131,7 @@ def get_and_save_diff(sample1, sample2):
        dataxy2 = dframe2[i]        
        for j in range(numcols):
             diffArray[i][j] = abs(dataxy1[j] - dataxy2[j])
-    print(diffArray)
+    return diffArray
             
     #filename = getfileno(sample1) + "-" + getfileno(sample2)
     #save_diff_data(filename, diffArray, numrows, numcols)

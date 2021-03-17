@@ -25,9 +25,7 @@ def plotting(channel1, channel2, data):
 BINWIDTH = 1000
 
 def gating(x1, x2, y1, y2, dataframe):
-    print(dataframe)
     gated = np.zeros((1+x2-x1, 1+y2-y1), dtype=np.uint16)
-    print(gated.shape)
     for i in range(0,x2-x1):
         for j in range(0,y2-y1):
             gated[i][j] = dataframe[i+x1][j+y1]
@@ -35,7 +33,6 @@ def gating(x1, x2, y1, y2, dataframe):
     return gated
     
 def generate_map(dframe, filename, channel1, channel2):
-    print("Generating Heatmap for: ", filename, "...")
     numrows = dframe.shape[0]
     datax = dframe[channel1]
     xmax = max(datax)
