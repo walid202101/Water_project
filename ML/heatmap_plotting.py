@@ -8,18 +8,10 @@ from pylab import plt
 import numpy as np
 
 def plotting(channel1, channel2, data):
-    x = data[channel1]
-    y = data[channel2]    
-    heatmap, xedges, yedges = np.histogram2d(x, y, bins=100)
-    extent = [xedges[0], xedges[-1], yedges[0], yedges[-1]]
-    extent = [0, 10000, 0, 10000]
     plt.clf()
-    plt.xlim(0,10000)
-    plt.ylim(0,10000)
-    plt.ticklabel_format(axis="both", style="sci", scilimits=(0,0))
     plt.xlabel(channel1)
     plt.ylabel(channel2)     
-    plt.imshow(heatmap.T, extent=extent, origin='lower', cmap='hot')
+    plt.imshow(data, cmap='hot', interpolation='nearest')
     plt.show()
     
 BINWIDTH = 1000
