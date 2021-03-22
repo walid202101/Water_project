@@ -7,6 +7,9 @@ Created on Wed Mar 17 09:36:04 2021
 
 # input FCS File, Output Pandas dataframe
 """
+# TO DO: Add method to save plot 
+
+
 def transform_file(channel1, channel2, data, transformed_method, b):
     # Transformations
     # The presence of both very dim and very bright cell populations in flow cytometry data can make
@@ -22,4 +25,8 @@ def transform_file(channel1, channel2, data, transformed_method, b):
     
     tranformed_data = data.data[[channel1, channel2]]
     return tranformed_data
+
+    
+    
+    
     

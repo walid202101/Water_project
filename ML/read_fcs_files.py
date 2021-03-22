@@ -20,7 +20,7 @@ def loading_fcs_from_directory(directory):
 
 def channels_name(data):
     # Channel Information to know which channels were measured
-    return data.channels_name
+    return data.channel_names
 
 
 def meta_data(data):
@@ -44,5 +44,6 @@ def save_array(data, _dir, _filename):
     
 def load_array(_dir, _filename):
     np.genfromtxt(_dir + "/" + _filename + ".csv",delimiter=',')
+    
 
     
