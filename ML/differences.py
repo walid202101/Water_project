@@ -19,82 +19,10 @@ The number of files is N(N-1)/2 where N is the number of samples in the director
 rawdatadir = '/home/dave/codes/python/FlowCytometryTools-master/data/gated/'  #input files
 diffdatadir = '/home/dave/codes/python/FlowCytometryTools-master/data/diff/'  #output files
 
-import os  
 import pandas as pd 
 import numpy as np
-from pandas import read_csv
+import sys
 
-####################################################
-"""
-This function saves the distance matrix
-Name        = save_diff_data
-
-Input arguments      = 
-    outfile = destination file
-    dataf   = frame containing data to be saved
-    xbin    = number of rows
-    ybin    = number of columns
-Returns     = NONE
-
-Used local vaiables    = 
-    outfile     = name of output file
-    filename    = full path of output file
-    fn          = file pointer
-"""
-
-def save_diff_data(outfile, dataf, xbin, ybin):
-    print('Now Saving ', outfile, "...") 
-    filename = diffdatadir + outfile + "-diff.csv"        
-
-    fn = open(filename,'w')
-    for i in range(xbin):
-        xystr = ""
-        for j in range(ybin-1):
-            xystr = xystr + str(dataf[i][j]) + ","
-        xystr = xystr + str(dataf[i][ybin-1]) + "\n"
-        fn.writelines(xystr)
-    
-    fn.close()
-    print('Data Saved in ', outfile) 
-    
-####################################################    
-"""
-This function reads the input file and returns its content in a data frame
-Name        = read_data
-
-Input arguments      = 
-    filename = full path of input file 
-    dataf   = frame containing data to be saved
-Returns     = data frame with contents of the file
-
-Used local variables    =
-    df      = data frame to return the content to the caller
-"""    
-def read_data(filename): 
-    print("Reading file ", filename, "....")
-    datafile = rawdatadir + filename               #gateddata.csv'
-    df = pd.read_csv(datafile, header=None)      #, index_col=0)
-    return df
-
-####################################################    
-"""
-This function is used for this particular file naming convention.
-Here, the file names use _ and sequential integers.
-This integers are extracted and used for naming the output file 
-Name    = get_file_no
-
-Input arguments
-    filename    = short name of the file
-
-Returns         = integer (file number)
-
-Used local variables    =
-    fno = integer value (sequence) in the file name. For example, the file name -sample_47_may.fcs' returns 47.  
-"""
-def get_file_no(filename):
-    leftstr = filename.split('-')[0]
-    fno = leftstr.split('_')[4]
-    return fno
 
 ####################################################    
 """
@@ -119,20 +47,23 @@ Used local variables    =
     diffArray   = 2D matrix for holding the difference between the corresponding 
     filename    = name of output file
 """    
-def get_diff(sample1, sample2):
-    dframe1 = sample1
-    dframe2 = sample2
+def main(inputfile1, inputfile2, outputfile):
+    dframe1 = pd.read_csv(inputfile1 + ".csv")
+    dframe2 = pd.read_csv(inputfile2 + ".csv")
     numrows = dframe1.shape[0]
     numcols = dframe1.shape[1]
-#    print ("Number of row, cols = (", numrows, ",", numcols, ")")
     diffArray = np.zeros((numrows, numcols), dtype=np.int32)
     for i in range(numrows):
        dataxy1 = dframe1[i]
        dataxy2 = dframe2[i]        
        for j in range(numcols):
             diffArray[i][j] = abs(dataxy1[j] - dataxy2[j])
-    return diffArray
+    diffArray.savetxt(outputfile + ".csv", delimiter=",")
+    
+inputfile1 = sys.argv[0]
+inputfile2 = sys.argv[1]
+outputfile = sys.argv[2]
+
+main(inputfile1, inputfile2, outputfile)
             
-    #filename = getfileno(sample1) + "-" + getfileno(sample2)
-    #save_diff_data(filename, diffArray, numrows, numcols)
 

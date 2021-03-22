@@ -5,13 +5,17 @@ Created on Wed Mar 17 09:37:31 2021
 @author: elias
 """
 import numpy as np
-    
-   
-def generate_map(dframe, channel1, channel2, binwidth):
-    numrows = dframe.shape[0]
-    datax = dframe[channel1]
+import pandas as pd
+from pylab import plt
+
+import sys
+
+def main(channel1, channel2, inputfile, outputfile, binwidth):
+    data = pd.read_csv(inputfile + ".csv")
+    numrows = data.shape[0]
+    datax = data[channel1]
     xmax = max(datax)
-    datax = dframe[channel2]
+    datax = data[channel2]
     ymax = max(datax)
     xbin = int(xmax/binwidth) + 1
     ybin = int(ymax/binwidth) + 1
@@ -19,19 +23,26 @@ def generate_map(dframe, channel1, channel2, binwidth):
     
     #Generate heatmap by counting number of events in a bin, for each data row
     for i in range(numrows):
-        dataxy = dframe.iloc[i]
+        dataxy = data.iloc[i]
         xval = int(dataxy[0] / binwidth)
         yval = int(dataxy[1] / binwidth)
         binArray[xval][yval] = 1 + binArray[xval][yval]
-    return binArray
+    pd.DataFrame.to_csv(outputfile + ".csv")
+    
+    # Plotting heatmap
+    plt.clf()
+    plt.xlabel(channel1)
+    plt.ylabel(channel2)     
+    plt.imshow(data, cmap='hot', interpolation='nearest')
+    plt.savefig(outputfile + ".png")
 
 
-def gating(x1, x2, y1, y2, dataframe):
-    gated = np.zeros((1+x2-x1, 1+y2-y1), dtype=np.uint16)
-    for i in range(0,x2-x1):
-        for j in range(0,y2-y1):
-            gated[i][j] = dataframe[i+x1][j+y1]
-            
-    return gated
-        
+
+channel1 = sys.argv[0]
+channel2 = sys.argv[1]
+inputfile = sys.argv[2]
+outputfile = sys.argv[3]
+binwidth = sys.argv[4]
+main(channel1, channel2, inputfile, outputfile, binwidth)
+
  

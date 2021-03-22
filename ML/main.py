@@ -61,10 +61,4 @@ def main():
     diff = differences.get_diff(gate1, gate2)
     
     
-    plotting.scatter(channel1, channel2, datasets[0])
-    plotting.scatter(channel1, channel2, transformed_data1)
-    plotting.heatmap(channel1, channel2, generated_map1)
-    plotting.heatmap(channel1, channel2, gate1)
-    plotting.heatmap(channel1, channel2, diff)
-    
 main()
