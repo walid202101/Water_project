@@ -32,7 +32,7 @@ def main(channel1, channel2, inputfile, outputfile, transformed_method, b):
         b=b)
     
     tranformed_data = data.data[[channel1, channel2]]
-    tranformed_data.DataFrame.to_csv(outputfile + ".csv")
+    tranformed_data.to_csv(outputfile + ".csv")
     
     # Plotting
     x = data[channel1]
@@ -47,13 +47,21 @@ def main(channel1, channel2, inputfile, outputfile, transformed_method, b):
     plt.savefig(outputfile + ".png")
 
     
-
+"""
 channel1 = sys.argv[0]
 channel2 = sys.argv[1]
 inputfile = sys.argv[2]
 outputfile = sys.argv[3]
 transformed_method = sys.argv[4]
 b = sys.argv[5] 
+"""
+
+channel1 = 'FL1-A'
+channel2 = 'FL3-A'
+inputfile = 'fcs_files/A02 Kranvatten kvall SYBR.fcs'
+outputfile = 'A02 Kranvatten kvall'
+transformed_method = 'hlog'
+b = 500
 
 main(channel1, channel2, inputfile, outputfile, transformed_method, b)
     

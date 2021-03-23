@@ -24,25 +24,32 @@ def main(channel1, channel2, inputfile, outputfile, binwidth):
     #Generate heatmap by counting number of events in a bin, for each data row
     for i in range(numrows):
         dataxy = data.iloc[i]
-        xval = int(dataxy[0] / binwidth)
-        yval = int(dataxy[1] / binwidth)
+        xval = int(dataxy[1] / binwidth)
+        yval = int(dataxy[2] / binwidth)
         binArray[xval][yval] = 1 + binArray[xval][yval]
-    pd.DataFrame.to_csv(outputfile + ".csv")
+    np.savetxt(outputfile + ".csv",binArray, delimiter=",")
     
     # Plotting heatmap
     plt.clf()
     plt.xlabel(channel1)
     plt.ylabel(channel2)     
-    plt.imshow(data, cmap='hot', interpolation='nearest')
+    plt.imshow(binArray, cmap='hot', interpolation='nearest')
     plt.savefig(outputfile + ".png")
 
 
-
+"""
 channel1 = sys.argv[0]
 channel2 = sys.argv[1]
 inputfile = sys.argv[2]
 outputfile = sys.argv[3]
 binwidth = sys.argv[4]
+"""
+
+channel1 = 'FL1-A'
+channel2 = 'FL3-A'
+inputfile = 'A02 Kranvatten kvall'
+outputfile = 'A02 Kranvatten kvall'
+binwidth = 100
 main(channel1, channel2, inputfile, outputfile, binwidth)
 
  

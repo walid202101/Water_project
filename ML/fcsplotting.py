@@ -23,10 +23,16 @@ def main(channel1, channel2, input_file_name, output_file_name):
     plt.imshow(heatmap.T, extent=extent, origin='lower')
     plt.savefig(output_file_name + ".png")
     
-    
+"""  
 channel1 = sys.argv[0]
 channel2 = sys.argv[1]
 inputfile = sys.argv[2]
 outputfile = sys.argv[3]
+"""
+
+channel1 = 'FL1-H'
+channel2 = 'FL3-H'
+inputfile = 'fcs_files/A02 Kranvatten Augusti SYBR.fcs'
+outputfile = 'A02 Kranvatten Augusti'
 
 main(channel1, channel2, inputfile, outputfile)

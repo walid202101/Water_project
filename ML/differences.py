@@ -22,6 +22,10 @@ diffdatadir = '/home/dave/codes/python/FlowCytometryTools-master/data/diff/'  #o
 import pandas as pd 
 import numpy as np
 import sys
+from numpy import genfromtxt
+from pylab import plt
+
+
 
 
 ####################################################    
@@ -48,8 +52,8 @@ Used local variables    =
     filename    = name of output file
 """    
 def main(inputfile1, inputfile2, outputfile):
-    dframe1 = pd.read_csv(inputfile1 + ".csv")
-    dframe2 = pd.read_csv(inputfile2 + ".csv")
+    dframe1 = genfromtxt(inputfile1 + '.csv', delimiter=',')
+    dframe2 = genfromtxt(inputfile2 + '.csv', delimiter=',')
     numrows = dframe1.shape[0]
     numcols = dframe1.shape[1]
     diffArray = np.zeros((numrows, numcols), dtype=np.int32)
@@ -58,11 +62,22 @@ def main(inputfile1, inputfile2, outputfile):
        dataxy2 = dframe2[i]        
        for j in range(numcols):
             diffArray[i][j] = abs(dataxy1[j] - dataxy2[j])
-    diffArray.savetxt(outputfile + ".csv", delimiter=",")
-    
+    np.savetxt(outputfile + ".csv",diffArray, delimiter=",")
+    print(diffArray)
+    # Plotting heatmap
+    plt.clf()   
+    plt.imshow(diffArray, cmap='hot', interpolation='nearest')
+    plt.savefig(outputfile + ".png")
+
+"""
 inputfile1 = sys.argv[0]
 inputfile2 = sys.argv[1]
 outputfile = sys.argv[2]
+"""
+
+inputfile1 = 'A02 Kranvatten Augusti45'
+inputfile2 = 'A02 Kranvatten kvall46'
+outputfile = 'Kranvatten AugKvall'
 
 main(inputfile1, inputfile2, outputfile)
             
