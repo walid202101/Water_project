@@ -9,9 +9,20 @@ from FlowCytometryTools import FCMeasurement
 from pylab import plt
 import numpy as np
 
+import mysql.connector
+import directory
+from flask import Flask
+from flask import request
+app = Flask(__name__)
+@app.route('/fcsplotting')  
 
-def main(channel1, channel2, input_file_name, output_file_name):
-    data = FCMeasurement(ID=input_file_name, datafile=input_file_name)
+def main():
+    inputfile = directory.fcsfiles_path(request.args.get('inputfile'))
+    outputfile = directory.fcsfiles_path(request.args.get('outputfile'))
+    channel1=request.args.get('channel1')
+    channel2=request.args.get('channel2')
+    
+    data = FCMeasurement(ID=inputfile, datafile=inputfile)
     x = data[channel1]
     y = data[channel2]
     heatmap, xedges, yedges = np.histogram2d(x, y, bins=100)
@@ -21,18 +32,10 @@ def main(channel1, channel2, input_file_name, output_file_name):
     plt.xlabel(channel1)
     plt.ylabel(channel2)
     plt.imshow(heatmap.T, extent=extent, origin='lower')
-    plt.savefig(output_file_name + ".png")
+    plt.savefig(outputfile + ".png")
     
-"""  
-channel1 = sys.argv[0]
-channel2 = sys.argv[1]
-inputfile = sys.argv[2]
-outputfile = sys.argv[3]
-"""
+    return 'Done'
 
-channel1 = 'FL1-H'
-channel2 = 'FL3-H'
-inputfile = 'fcs_files/A02 Kranvatten Augusti SYBR.fcs'
-outputfile = 'A02 Kranvatten Augusti'
+if __name__ == '__main__':
+   app.run()
 
-main(channel1, channel2, inputfile, outputfile)

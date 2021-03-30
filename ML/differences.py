@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+
 """
 Created on Tue Mar  3 00:54:51 2020
 
@@ -15,18 +16,6 @@ This code calculates the difference between gated samples according to the follo
 
 The number of files is N(N-1)/2 where N is the number of samples in the directory
 """
-
-rawdatadir = '/home/dave/codes/python/FlowCytometryTools-master/data/gated/'  #input files
-diffdatadir = '/home/dave/codes/python/FlowCytometryTools-master/data/diff/'  #output files
-
-import pandas as pd 
-import numpy as np
-import sys
-from numpy import genfromtxt
-from pylab import plt
-
-
-
 
 ####################################################    
 """
@@ -50,35 +39,69 @@ Used local variables    =
     dataxy2     = vector to read data from ith row of frame2
     diffArray   = 2D matrix for holding the difference between the corresponding 
     filename    = name of output file
-"""    
-def main(inputfile1, inputfile2, outputfile):
+"""
+
+import pandas as pd 
+import numpy as np
+from numpy import genfromtxt
+from pylab import plt
+
+import mysql.connector
+import directory
+from flask import Flask
+from flask import request
+app = Flask(__name__)
+@app.route('/differences')
+
+def main():
+    files = []
+    for i in range(1,101):
+        opt_param = request.args.get("inputfile" + str(i))
+        if opt_param is None:
+            break
+        else:
+            files.append(directory.gates_path(opt_param))
+            
+    outputfile = directory.diff_path(request.args.get('outputfile'))
+    print(len(files))
+    if(len(files)>1):
+        num = 101
+        for i in range(0,len(files)):
+            for j in range(0,len(files)):
+                if(j > i):
+                    diff(files[i], files[j], outputfile + str(num))
+                    num = num + 1
+    return 'Done'
+
+
+
+def diff(inputfile1, inputfile2, outputfile):    
     dframe1 = genfromtxt(inputfile1 + '.csv', delimiter=',')
     dframe2 = genfromtxt(inputfile2 + '.csv', delimiter=',')
+    
     numrows = dframe1.shape[0]
     numcols = dframe1.shape[1]
+    
+    if(dframe2.shape[0]< dframe1.shape[0]):
+        numrows = dframe2.shape[0]
+        numcols = dframe2.shape[1]    
+    
     diffArray = np.zeros((numrows, numcols), dtype=np.int32)
     for i in range(numrows):
        dataxy1 = dframe1[i]
-       dataxy2 = dframe2[i]        
+       dataxy2 = dframe2[i]
        for j in range(numcols):
             diffArray[i][j] = abs(dataxy1[j] - dataxy2[j])
     np.savetxt(outputfile + ".csv",diffArray, delimiter=",")
-    print(diffArray)
     # Plotting heatmap
     plt.clf()   
     plt.imshow(diffArray, cmap='hot', interpolation='nearest')
     plt.savefig(outputfile + ".png")
+    print("-----------------------------------")
+    print(diffArray.shape)
+    return 'Done2'
 
-"""
-inputfile1 = sys.argv[0]
-inputfile2 = sys.argv[1]
-outputfile = sys.argv[2]
-"""
 
-inputfile1 = 'A02 Kranvatten Augusti45'
-inputfile2 = 'A02 Kranvatten kvall46'
-outputfile = 'Kranvatten AugKvall'
-
-main(inputfile1, inputfile2, outputfile)
-            
+if __name__ == '__main__':
+   app.run()         
 

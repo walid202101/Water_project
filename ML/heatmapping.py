@@ -7,10 +7,22 @@ Created on Wed Mar 17 09:37:31 2021
 import numpy as np
 import pandas as pd
 from pylab import plt
+import seaborn as sb
 
-import sys
+import mysql.connector
+import directory
+from flask import Flask
+from flask import request
+app = Flask(__name__)
+@app.route('/heatmapping')  
 
-def main(channel1, channel2, inputfile, outputfile, binwidth):
+def main():
+    inputfile = directory.transform_path(request.args.get('inputfile'))
+    outputfile = directory.heatmap_path(request.args.get('outputfile'))
+    channel1=request.args.get('channel1')
+    channel2=request.args.get('channel2')
+    binwidth = int(request.args.get('binwidth'))
+    print(inputfile)
     data = pd.read_csv(inputfile + ".csv")
     numrows = data.shape[0]
     datax = data[channel1]
@@ -28,28 +40,16 @@ def main(channel1, channel2, inputfile, outputfile, binwidth):
         yval = int(dataxy[2] / binwidth)
         binArray[xval][yval] = 1 + binArray[xval][yval]
     np.savetxt(outputfile + ".csv",binArray, delimiter=",")
+    print(binArray.shape)
     
-    # Plotting heatmap
-    plt.clf()
-    plt.xlabel(channel1)
-    plt.ylabel(channel2)     
-    plt.imshow(binArray, cmap='hot', interpolation='nearest')
+    
+    fig, ax = plt.subplots(figsize=(11, 9))
+    sb.heatmap(binArray)
+    
     plt.savefig(outputfile + ".png")
+    plt.show()
+    return 'Done'
 
 
-"""
-channel1 = sys.argv[0]
-channel2 = sys.argv[1]
-inputfile = sys.argv[2]
-outputfile = sys.argv[3]
-binwidth = sys.argv[4]
-"""
-
-channel1 = 'FL1-A'
-channel2 = 'FL3-A'
-inputfile = 'A02 Kranvatten kvall'
-outputfile = 'A02 Kranvatten kvall'
-binwidth = 100
-main(channel1, channel2, inputfile, outputfile, binwidth)
-
- 
+if __name__ == '__main__':
+   app.run()

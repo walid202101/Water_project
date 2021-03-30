@@ -7,17 +7,26 @@ Created on Wed Mar 17 09:36:04 2021
 
 # input FCS File, Output Pandas dataframe
 """
-# TO DO: Add method to save plot 
-import sys
 from FlowCytometryTools import FCMeasurement
-import numpy as np
 from pylab import plt
 
+import mysql.connector
+import directory
+from flask import Flask
+from flask import request
+app = Flask(__name__)
+@app.route('/transformation')  
 
-
-
-def main(channel1, channel2, inputfile, outputfile, transformed_method, b):
+def main():
     
+    inputfile = directory.fcsfiles_path(request.args.get('inputfile'))
+    outputfile = directory.transform_path(request.args.get('outputfile'))
+    channel1=request.args.get('channel1')
+    channel2=request.args.get('channel2')
+    transformed_method = request.args.get('transformed_method')
+    b = int(request.args.get('b'))
+    
+    #Read & Transform
     data = FCMeasurement(ID=inputfile, datafile=inputfile)
     # Transformations
     # The presence of both very dim and very bright cell populations in flow cytometry data can make
@@ -37,32 +46,13 @@ def main(channel1, channel2, inputfile, outputfile, transformed_method, b):
     # Plotting
     x = data[channel1]
     y = data[channel2]
-    heatmap, xedges, yedges = np.histogram2d(x, y, bins=100)
-    extent = [xedges[0], xedges[-1], yedges[0], yedges[-1]]
-    plt.clf()
-    plt.ticklabel_format(axis="both", style="sci", scilimits=(0,0))
+    plt.figure()
     plt.xlabel(channel1)
     plt.ylabel(channel2)
-    plt.imshow(heatmap.T, extent=extent, origin='lower')
+    plt.scatter(x, y, facecolors = 'blue', edgecolors='none', s=0.25)
     plt.savefig(outputfile + ".png")
-
+    plt.show()
+    return 'Done'
     
-"""
-channel1 = sys.argv[0]
-channel2 = sys.argv[1]
-inputfile = sys.argv[2]
-outputfile = sys.argv[3]
-transformed_method = sys.argv[4]
-b = sys.argv[5] 
-"""
-
-channel1 = 'FL1-A'
-channel2 = 'FL3-A'
-inputfile = 'fcs_files/A02 Kranvatten kvall SYBR.fcs'
-outputfile = 'A02 Kranvatten kvall'
-transformed_method = 'hlog'
-b = 500
-
-main(channel1, channel2, inputfile, outputfile, transformed_method, b)
-    
-    
+if __name__ == '__main__':
+   app.run()
