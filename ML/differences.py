@@ -46,39 +46,7 @@ import numpy as np
 from numpy import genfromtxt
 from pylab import plt
 
-import mysql.connector
-import directory
-from flask import Flask
-from flask import request
-app = Flask(__name__)
-@app.route('/differences')
-
-def main():
-    files = []
-    for i in range(1,101):
-        opt_param = request.args.get("inputfile" + str(i))
-        if opt_param is None:
-            break
-        else:
-            files.append(directory.gates_path(opt_param))
-            
-    outputfile = directory.diff_path(request.args.get('outputfile'))
-    print(len(files))
-    if(len(files)>1):
-        num = 101
-        for i in range(0,len(files)):
-            for j in range(0,len(files)):
-                if(j > i):
-                    diff(files[i], files[j], outputfile + str(num))
-                    num = num + 1
-    return 'Done'
-
-
-
-def diff(inputfile1, inputfile2, outputfile):    
-    dframe1 = genfromtxt(inputfile1 + '.csv', delimiter=',')
-    dframe2 = genfromtxt(inputfile2 + '.csv', delimiter=',')
-    
+def main(dframe1, dframe2):    
     numrows = dframe1.shape[0]
     numcols = dframe1.shape[1]
     
@@ -92,16 +60,9 @@ def diff(inputfile1, inputfile2, outputfile):
        dataxy2 = dframe2[i]
        for j in range(numcols):
             diffArray[i][j] = abs(dataxy1[j] - dataxy2[j])
-    np.savetxt(outputfile + ".csv",diffArray, delimiter=",")
     # Plotting heatmap
     plt.clf()   
     plt.imshow(diffArray, cmap='hot', interpolation='nearest')
-    plt.savefig(outputfile + ".png")
-    print("-----------------------------------")
-    print(diffArray.shape)
-    return 'Done2'
+    return diffArray
 
-
-if __name__ == '__main__':
-   app.run()         
 
