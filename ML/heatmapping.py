@@ -8,6 +8,7 @@ import numpy as np
 from pylab import plt
 import seaborn as sb
 import directory
+
 def main(data, channel1, channel2, binwidth, filename, jobid):    
     numrows = data.shape[0]
     datax = data[channel1]
@@ -26,10 +27,9 @@ def main(data, channel1, channel2, binwidth, filename, jobid):
         binArray[xval][yval] = 1 + binArray[xval][yval]    
     
     fig, ax = plt.subplots(figsize=(11, 9))
-    
-    sb.heatmap(binArray)
+    sb.heatmap(binArray, cmap='YlGnBu')
     plt.title("heatmap for " + filename)
-    savedir = directory.imageolder(jobid) + "/heatmap_" + filename + '.png'
+    savedir = directory.Image_heatmap(jobid) + "/" + filename + '.png'
     plt.savefig(savedir)
     
     return binArray

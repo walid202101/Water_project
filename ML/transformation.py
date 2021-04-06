@@ -9,9 +9,9 @@ Created on Wed Mar 17 09:36:04 2021
 """
 import numpy as np
 from pylab import plt
+import directory
 
-
-def main(data, channel1, channel2, transformed_method, b):
+def main(data, channel1, channel2, transformed_method, b, filename, jobid):
     # Transformations
     # The presence of both very dim and very bright cell populations in flow cytometry data can make
     # it difficult to simultaneously visualize both populations on the same plot. To address this problem,
@@ -24,4 +24,8 @@ def main(data, channel1, channel2, transformed_method, b):
         channels=[channel1, channel2],
         b=b)
     tranformed_data = data.data[[channel1, channel2]]
+    plt.figure()
+    data.plot([channel1, channel2], kind='scatter', s=1, alpha=0.3)
+    savedir = directory.Image_transformed(jobid) + "/" + filename + '.png'
+    plt.savefig(savedir)
     return tranformed_data

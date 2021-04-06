@@ -4,21 +4,39 @@ Created on Mon Mar 29 22:49:22 2021
 
 @author: elias
 """
-# Main Directory
-foldername = r'C:\Users\elias\Documents\GitHub\Water_project\ML\Jobs\1'
-     
+# Main Directory 
+foldername = r'C:\Users\elias\Documents\GitHub\Water_project\ML\Jobs/'
 
-def fcsfilesfolder(jobid):
-    return foldername + "/fcsfiles" 
+# Internal
+def Rootfolder(jobid):
+    return foldername + jobid
+def Images(jobid):
+    return Rootfolder(jobid) + "/images"
 
-def gatingfolder(jobid):
-    return foldername + "/gating"
+# External
+def Fcs_files(jobid):
+    return Rootfolder(jobid) + "/fcs_files"
 
-def difffolder(jobid):
-    return foldername + "/differences" 
+def Gating(jobid):
+    return Rootfolder(jobid) + "/gating"
 
-def imageolder(jobid):
-    return foldername + "/images" 
+def Differences(jobid):
+    return Rootfolder(jobid) + "/differences"
 
-def clusteringfolder(jobid):
-    return foldername + "/clustering" 
+def Clustering(jobid):
+    return Rootfolder(jobid) + "/clustering"
+
+def Image_transformed(jobid):
+    return Images(jobid) + "/transformed"
+
+def Image_heatmap(jobid):
+    return Images(jobid) + "/heatmap"
+
+def Image_gating(jobid):
+    return Images(jobid) + "/gating"
+
+def Image_differences(jobid):
+    return Images(jobid) + "/differences"
+
+def Image_clustering(jobid):
+    return Images(jobid) + "/clustering"
