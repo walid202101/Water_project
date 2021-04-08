@@ -25,7 +25,7 @@ def main(data, x1, x2, y1, y2, filename, jobid):
     fig, ax = plt.subplots(figsize=(11, 9))
     sb.heatmap(gated, cmap='YlGnBu')
     plt.title("gating for " + filename)
-    savedir = directory.image_gating(jobid) + "/" + filename + '.png'
+    savedir = directory.Image_gating(jobid) + "/" + filename + '.png'
     plt.savefig(savedir)
     
     return gated

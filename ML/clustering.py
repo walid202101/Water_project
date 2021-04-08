@@ -11,38 +11,59 @@ import kmeans
 import kmodes_
 import hierarchical
 
+import mysql.connector
 from flask import Flask
 from flask import request
 app = Flask(__name__)
-#http://127.0.0.1:5000/dbscan?jobid=1
 
-@app.route('/dbscan')
-def main1():
-    jobid = request.args.get('jobid')
-    dbscan.main(jobid)
-    return 'Done: dbscan'
+# http://127.0.0.1:5002/clustering?jobid=1&clusteringmethod=dbscan
+# http://127.0.0.1:5002/clustering?jobid=1&clusteringmethod=kmeans
+# http://127.0.0.1:5002/clustering?jobid=1&clusteringmethod=kmodes
+# http://127.0.0.1:5002/clustering?jobid=1&clusteringmethod=hierarchical
 
-#http://127.0.0.1:5000/kmeans?jobid=1
-@app.route('/kmeans')
-def main2():
+@app.route('/clustering')
+def main():
     jobid = request.args.get('jobid')
-    kmeans.main(jobid)
-    return 'Done: kmeans'
+    clusteringmethod = request.args.get('clusteringmethod')
+    if(clusteringmethod == 'dbscan'):    
+        dbscan.main(jobid)
+    elif(clusteringmethod == 'kmeans'):
+        kmeans.main(jobid)
+    elif(clusteringmethod == 'kmodes'):
+        kmodes_.main(jobid)
+    elif(clusteringmethod == 'hierarchical'):
+        hierarchical.main(jobid)
+    
+    try:
+     connection = mysql.connector.connect(host='localhost',
+                                         database='water_project',
+                                         user='root',
+                                         password='')
+    
+     cursor = connection.cursor()
 
-#http://127.0.0.1:5000/kmodes?jobid=1
-@app.route('/kmodes')
-def main3():
-    jobid = request.args.get('jobid')
-    kmodes_.main(jobid)
-    return 'Done: kmodes'
+     job_status="COMPLETED"
+     cursor.execute ("""
+     UPDATE jobs
+     SET job6_status=%s
+     WHERE job_id=%s
+     """, (job_status,jobid))
 
-#http://127.0.0.1:5000/hierarchical?jobid=1
-@app.route('/hierarchical')
-def main4():
-    jobid = request.args.get('jobid')
-    hierarchical.main(jobid)
-    return 'Done: hierarchical'
+     connection.commit()
+     print(cursor.rowcount, "Record Update successfully into jobs")
+     cursor.close()
+
+    except mysql.connector.Error as error:
+     print("Failed to insert record into table {}".format(error))
+
+    finally:
+     if connection.is_connected():
+        connection.close()
+        print("MySQL connection is closed")
+
+    return 'clustering job completed'
+
 
 if __name__ == '__main__':
-   app.run()
+   app.run(port=5002)
    
