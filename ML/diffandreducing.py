@@ -18,7 +18,8 @@ import seaborn as sb
 import numpy as np
 
 import directory
-import mysql.connector
+import dbconnection
+
 
 from flask import Flask
 from flask import request
@@ -83,42 +84,9 @@ def main():
     # MDS Implementation
     mds.main(files, bucket, squaresize, jobid)           
 
-    try:
-     connection = mysql.connector.connect(host='localhost',
-                                         database='water_project',
-                                         user='root',
-                                         password='')
-    
-     cursor = connection.cursor()
-
-     job_status="COMPLETED"
-     cursor.execute ("""
-     UPDATE jobs
-     SET job5_status=%s
-     WHERE job_id=%s
-     """, (job_status,jobid))
-
-     connection.commit()
-     print(cursor.rowcount, "Record Update successfully into jobs")
-     cursor.close()
-
-    except mysql.connector.Error as error:
-     print("Failed to insert record into table {}".format(error))
-
-    finally:
-     if connection.is_connected():
-        connection.close()
-        print("MySQL connection is closed")
-
-<<<<<<< HEAD
-    return 'difference and reducing job completed'
-=======
-    return 'clustering job completed'
-<<<<<<< Updated upstream
->>>>>>> 11e8baa... last update
-
-=======
->>>>>>> Stashed changes
+    # Update database
+    returnmessage = dbconnection.main(jobid, 2)
+    return returnmessage
 
 if __name__ == '__main__':
    app.run(port=5001)
