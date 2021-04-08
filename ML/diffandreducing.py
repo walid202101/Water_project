@@ -12,7 +12,7 @@ import mds
 
 from numpy import genfromtxt
 
-from pylab import plt
+import matplotlib.pyplot as plt
 import seaborn as sb
 
 import numpy as np
@@ -31,6 +31,7 @@ def main():
     jobid = request.args.get('jobid')
     # Reading file from directory
     files = []
+    
     numberoffile = 0
     squaresize = 0
     for (dirpath, dirnames, filenames) in walk(directory.Gating(jobid)):
@@ -41,7 +42,6 @@ def main():
         tempdata = genfromtxt(filepath, delimiter=',')
         dataset.append(tempdata)
     numberoffile = len(dataset)
-     
     # Calculate Differecne
     savedir = directory.Differences(jobid)
     
@@ -58,6 +58,7 @@ def main():
             
         diff.append(subdiff)
     diff = np.array(diff)
+    print(diff.shape)
     
     squaresize = diff.shape[2]
     w, h = numberoffile * squaresize, numberoffile * squaresize
@@ -87,6 +88,6 @@ def main():
     # Update database
     returnmessage = dbconnection.main(jobid, 2)
     return returnmessage
-
+    
 if __name__ == '__main__':
    app.run(port=5001)

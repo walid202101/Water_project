@@ -5,7 +5,7 @@ Created on Wed Mar 17 09:37:31 2021
 @author: elias
 """
 import numpy as np
-from pylab import plt
+import matplotlib.pyplot as plt
 import seaborn as sb
 import directory
 

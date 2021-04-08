@@ -6,7 +6,7 @@ Created on Mon Mar 29 12:51:48 2021
 """
 import pandas as pd
 from sklearn.cluster import KMeans
-from pylab import plt
+import matplotlib.pyplot as plt
 import numpy as np
 
 

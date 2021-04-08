@@ -41,10 +41,7 @@ Used local variables    =
     filename    = name of output file
 """
 
-import pandas as pd 
 import numpy as np
-from numpy import genfromtxt
-from pylab import plt
 
 def main(dframe1, dframe2):    
     numrows = dframe1.shape[0]

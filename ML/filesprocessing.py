@@ -20,7 +20,7 @@ app = Flask(__name__)
 @app.route('/fileprocessing')
 
 # Test with this link
-# http://127.0.0.1:5000/fileprocessing?jobid=1&channel1=FL1-A&channel2=FL3-A&transformed_method=hlog&b=100&binwidth=100&x1=18&x2=34&y1=32&y2=40
+# http://127.0.0.1:5000/fileprocessing?jobid=2&channel1=FL1-A&channel2=FL3-A&transformed_method=hlog&b=100&binwidth=100&x1=18&x2=34&y1=32&y2=40
 
 def main():
     # Reading the parameters

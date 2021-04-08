@@ -6,7 +6,7 @@ Created on Mon Mar 29 13:19:31 2021
 """
 
 import pandas as pd
-from pylab import plt
+import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 
 import numpy as np

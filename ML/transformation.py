@@ -7,8 +7,7 @@ Created on Wed Mar 17 09:36:04 2021
 
 # input FCS File, Output Pandas dataframe
 """
-import numpy as np
-from pylab import plt
+import matplotlib.pyplot as plt
 import directory
 
 def main(data, channel1, channel2, transformed_method, b, filename, jobid):

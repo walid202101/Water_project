@@ -33,7 +33,7 @@ def main():
         hierarchical.main(jobid)
     
     # Update database
-    returnmessage = dbconnection.main(jobid, 2)
+    returnmessage = dbconnection.main(jobid, 3)
     return returnmessage
 
 

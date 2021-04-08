@@ -4,11 +4,8 @@ Created on Wed Mar 24 12:02:38 2021
 @author: elias
 """
 import numpy as np
-from sklearn.metrics import pairwise_distances
 from sklearn import manifold
-from numpy import genfromtxt
-from pylab import plt
-import pandas as pd
+import matplotlib.pyplot as plt
 import directory
 
 def main(files, data, size, jobid):
