@@ -24,7 +24,7 @@ from flask import Flask
 from flask import request
 app = Flask(__name__)
 @app.route('/diff')
-#http://127.0.0.1:5001/diff?jobid=1
+#http://127.0.0.1:5001/diff?jobid=2
 
 def main():
     jobid = request.args.get('jobid')
@@ -110,7 +110,7 @@ def main():
         connection.close()
         print("MySQL connection is closed")
 
-    return 'clustering job completed'
+    return 'difference and reducing job completed'
 
 
 if __name__ == '__main__':
