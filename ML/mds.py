@@ -31,5 +31,5 @@ def main(files, data, size, jobid):
         plt.scatter(centriods[i][0], centriods[i][1], marker='x', s=10)
         filename = files[i][3:-12]
         plt.annotate(filename, (centriods[i][0]+2, centriods[i][1]+2))
-    plt.savefig(directory.Image_clustering(jobid) + "/mds.png")
+    plt.savefig(directory.Image_differences(jobid) + "/mds.png")
       

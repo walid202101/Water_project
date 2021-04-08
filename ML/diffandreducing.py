@@ -110,8 +110,15 @@ def main():
         connection.close()
         print("MySQL connection is closed")
 
+<<<<<<< HEAD
     return 'difference and reducing job completed'
+=======
+    return 'clustering job completed'
+<<<<<<< Updated upstream
+>>>>>>> 11e8baa... last update
 
+=======
+>>>>>>> Stashed changes
 
 if __name__ == '__main__':
    app.run(port=5001)

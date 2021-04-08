@@ -9,7 +9,7 @@ from os import walk
 import transformation
 import heatmapping
 import gating
-
+import mysql.connector
 from FlowCytometryTools import FCMeasurement
 import numpy as np
 import directory
@@ -58,11 +58,16 @@ def main():
         savedir = directory.Gating(jobid) + "/" + file + ".csv"
         np.savetxt(savedir, tempdata, delimiter=",")
     try:
+<<<<<<< Updated upstream
         connection = mysql.connector.connect(host='localhost',
+=======
+     connection = mysql.connector.connect(host='localhost',
+>>>>>>> Stashed changes
                                          database='water_project',
                                          user='root',
                                          password='')
     
+<<<<<<< Updated upstream
         cursor = connection.cursor()
 
         job_status="COMPLETED"
@@ -82,6 +87,27 @@ def main():
     finally:
         if connection.is_connected():
             connection.close()
+=======
+     cursor = connection.cursor()
+
+     job_status="COMPLETED"
+     cursor.execute ("""
+     UPDATE jobs
+     SET job1_status=%s,job2_status=%s,job3_status=%s,job4_status=%s
+     WHERE job_id=%s
+     """, (job_status,job_status,job_status,job_status,jobid))
+
+     connection.commit()
+     print(cursor.rowcount, "Record Update successfully into jobs")
+     cursor.close()
+
+    except mysql.connector.Error as error:
+     print("Failed to insert record into table {}".format(error))
+
+    finally:
+     if connection.is_connected():
+        connection.close()
+>>>>>>> Stashed changes
         print("MySQL connection is closed")
 
     return 'Fileprocess job completed'

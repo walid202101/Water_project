@@ -5,7 +5,7 @@ Created on Mon Mar 29 22:49:22 2021
 @author: elias
 """
 # Main Directory 
-foldername = r'C:\Users\elias\Documents\GitHub\Water_project\ML\Jobs/'
+foldername = 'C:/wamp64/www/frontend/public/jobs/' 
 
 # Internal
 def Rootfolder(jobid):
