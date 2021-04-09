@@ -9,6 +9,7 @@ Created on Wed Mar 17 09:36:04 2021
 """
 import matplotlib.pyplot as plt
 import directory
+import seaborn as sb
 
 def main(data, channel1, channel2, transformed_method, b, filename, jobid):
     # Transformations
@@ -24,7 +25,7 @@ def main(data, channel1, channel2, transformed_method, b, filename, jobid):
         b=b)
     tranformed_data = data.data[[channel1, channel2]]
     plt.figure()
-    data.plot([channel1, channel2], kind='scatter', s=1, alpha=0.3)
+    sb.scatterplot(data=data.data, x=channel1, y=channel2, s=1)
     savedir = directory.Image_transformed(jobid) + "/" + filename + '.png'
     plt.savefig(savedir)
     return tranformed_data

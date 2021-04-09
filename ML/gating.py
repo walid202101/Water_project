@@ -5,10 +5,8 @@ Created on Mon Mar 22 21:02:12 2021
 @author: elias
 """
 import numpy as np
-from numpy import genfromtxt
-import pandas as pd
 import directory
-from pylab import plt
+import matplotlib.pyplot as plt
 import seaborn as sb
 
  

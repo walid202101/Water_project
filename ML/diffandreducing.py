@@ -52,9 +52,13 @@ def main():
             diffarr = differences.main(dataset[i], dataset[j])
             subdiff.append(diffarr)
             
-            # Save each file
+            # Save file & plot
             filename = directory.Differences(jobid) + "/diff_"+ str(i) + "_"+str(j) + "_" + ".csv"
+            plotname = directory.Image_differences(jobid) + "/diff_"+ str(i) + "_"+str(j) + "_" + ".png"
             np.savetxt(filename, diffarr, delimiter=",")
+            plt.figure()
+            sb.heatmap(diffarr, cmap='YlGnBu')
+            plt.savefig(plotname)
             
         diff.append(subdiff)
     diff = np.array(diff)
