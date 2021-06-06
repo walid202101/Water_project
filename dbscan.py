@@ -13,7 +13,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-def main(jobid):
+def main(jobid, files):
     data = genfromtxt(directory.Clustering(jobid) + "/mds.csv", delimiter=',')
     data = pd.DataFrame(data)
     db = DBSCAN(eps=0.3, min_samples=1).fit(data)
@@ -25,6 +25,9 @@ def main(jobid):
     unique_labels = set(labels)
     plt.figure()
     plt.scatter(data.iloc[:,0], data.iloc[:,1],c=y_pred, cmap='Paired')
+    for i in range(0, len(files)):        
+        filename = files[i][3:-12]
+        plt.annotate(filename, (data.iloc[i][0]+2, data.iloc[i][1]+2))
     savedir = directory.Image_clustering(jobid) + "/dbscan.png"
     plt.savefig(savedir)
     

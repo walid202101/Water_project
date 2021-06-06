@@ -40,13 +40,13 @@ def main():
     # Reading file from directory
     files = []
     for (dirpath, dirnames, filenames) in walk(directory.Fcs_files(jobid)):
-        files.extend(filenames) 
-        
+        files.extend(filenames)
     dataset = []
     for file in files:
         filepath = directory.Fcs_files(jobid) + "/" + file
         tempdata = FCMeasurement(ID=file, datafile=filepath)
         dataset.append(tempdata)
+        
         
     # Transformation, Heatmap, gating
     for data, file in zip(dataset, files):

@@ -9,6 +9,10 @@ import kmeans
 import kmodes_
 import hierarchical
 
+from os import walk
+import directory
+
+
 import dbconnection
 from flask import Flask
 from flask import request
@@ -23,14 +27,19 @@ app = Flask(__name__)
 def main():
     jobid = request.args.get('jobid')
     clusteringmethod = request.args.get('clusteringmethod')
+    # Reading file from directory
+    files = []
+    for (dirpath, dirnames, filenames) in walk(directory.Fcs_files(jobid)):
+        files.extend(filenames)
+        
     if(clusteringmethod == 'dbscan'):    
-        dbscan.main(jobid)
+        dbscan.main(jobid, files)
     elif(clusteringmethod == 'kmeans'):
-        kmeans.main(jobid)
+        kmeans.main(jobid, files)
     elif(clusteringmethod == 'kmodes'):
-        kmodes_.main(jobid)
+        kmodes_.main(jobid, files)
     elif(clusteringmethod == 'hierarchical'):
-        hierarchical.main(jobid)
+        hierarchical.main(jobid, files)
     
     # Update database
     returnmessage = dbconnection.main(jobid, 3)

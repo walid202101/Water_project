@@ -5,7 +5,7 @@ Created on Mon Mar 29 22:49:22 2021
 @author: elias
 """
 # Main Directory 
-foldername = '/var/www/frontend/public/jobs/' 
+foldername = '/var/www/frontend/public/jobs/'
 
 # Internal
 def Rootfolder(jobid):

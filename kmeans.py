@@ -13,7 +13,7 @@ import numpy as np
 import directory
 from numpy import genfromtxt
 
-def main(jobid):
+def main(jobid, files):
     n_digits = 2
     data = genfromtxt(directory.Clustering(jobid) + "/mds.csv", delimiter=',')
     data = pd.DataFrame(data)
@@ -33,6 +33,9 @@ def main(jobid):
     for i in u_labels:
         plt.scatter(df[label == i , 0] , df[label == i , 1] , label = i, s=10)
     plt.scatter(centroids[:,0] , centroids[:,1] , s = 30, color = 'k')
+    for i in range(0, len(files)):        
+        filename = files[i][3:-12]
+        plt.annotate(filename, (df[i][0]+2, df[i][1]+2))
     plt.legend()
     savedir = directory.Image_clustering(jobid) + "/kmeans.png"
     plt.savefig(savedir)
